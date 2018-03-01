@@ -3,14 +3,11 @@ import { Project } from '../types/index';
 import { Table, Input, Popconfirm, Icon } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 
-export interface ProjectTableItem extends Project {    
-    operation: string;
-}
 export interface Props {
-    projects: Project[];
-    editProject?: () => void;
-    updateProject?: () => void;
-    deleteProject?: () => void;
+    projects: Project[];  
+    editProject: (item: Project) => void;  
+    updateProject: (item: Project) => void;
+    deleteProject: (item: Project) => void;
 }
 
 export interface CellProps {
@@ -19,16 +16,6 @@ export interface CellProps {
     onChange: (event: any) => void;
 }
 
-/*
-for (let i = 0; i < 100; i++) {
-  data.push({
-    key: i.toString(),
-    name: `Edrward ${i}`,
-    age: 32,
-    address: `London Park no. ${i}`,
-  });
-}
-*/
 const EditableCell = ({ editable, value, onChange }: CellProps) => (
   <div>
     {editable
@@ -38,28 +25,17 @@ const EditableCell = ({ editable, value, onChange }: CellProps) => (
   </div>
 );
 
-class Projects extends React.Component<Props, {data: Project[]}> {
-  cacheData: Project[];
-  columns: ColumnProps<ProjectTableItem>[];
-  
+class Projects extends React.Component<Props, {}> {  
+  columns: ColumnProps<Project>[];   
   constructor(props: Props) {
     super(props);    
-    this.columns = [{
-      title: 'Name',
-      dataIndex: 'name',
-      width: '40%',
-      render: (text, record) => this.renderColumns(text, record, 'name'),
-    }, {
-      title: 'Hourly rate',
-      dataIndex: 'hourlyRate',
-      width: '20%',
-      render: (text, record) => this.renderColumns(text, record, 'hourlyRate'),
-    }, {
-      title: 'Currency',
-      dataIndex: 'currency',
-      width: '20%',
-      render: (text, record) => this.renderColumns(text, record, 'currency'),
-    }, {
+    // tslint:disable-next-line:no-console
+    console.log('3', props.projects);
+    this.columns = [];
+    this.columns.push(this.createColumn('name', 'Name', '40%'));
+    this.columns.push(this.createColumn('hourlyRate', 'Hourly rate', '20%'));
+    this.columns.push(this.createColumn('currency', 'Currency', '20%'));
+    this.columns.push({
       title: 'Operation',
       dataIndex: 'operation',
       render: (text, record) => {
@@ -69,75 +45,83 @@ class Projects extends React.Component<Props, {data: Project[]}> {
             {
               editable ?
                 <span>
-                  <a onClick={() => this.save(record.key)}>Save</a>
-                  <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.key)}>
+                  <a onClick={() => this.saveItem(record.id)}>Save</a>
+                  <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancelItem(record.id)}>
                     <a>Cancel</a>
                   </Popconfirm>
                 </span>
                 : 
                 <span>                    
-                    <Icon type="edit" className="App-icon" onClick={() => this.edit(record.key)}/>
-                    <Icon type="delete" className="App-icon" onClick={() => this.delete(record.key)}/>                
+                  <Icon type="edit" className="App-icon" onClick={() => this.editItem(record.id)}/>
+                  <Icon type="delete" className="App-icon" onClick={() => this.deleteItem(record.id)}/>                
                 </span>
             }
           </div>
         );
       },
-    }];
-    this.state = { data: this.props.projects };
-    this.cacheData = this.props.projects.map(item => ({ ...item }));
+    });    
   }
+
   renderColumns(text: string, record: any, column: string) {
     return (
       <EditableCell
         editable={record.editable}
         value={text}
-        onChange={value => this.handleChange(value, record.key, column)}
+        onChange={value => this.handleChange(value, record.id, column)}
       />
     );
   }
-  handleChange(value: string, key: string, column: string) {
-    const newData = [...this.state.data];
-    const target = newData.filter(item => key === item.key)[0];
-    if (target) {
+  
+  createColumn(propertyName: any, columnName: string, columnWidth: string) {
+    return ({
+      title: columnName,
+      dataIndex: propertyName,
+      width: columnWidth,
+      render: (text: string, record: any) => this.renderColumns(text, record, propertyName),
+    });
+  }
+
+  handleChange(value: string, key: string, column: string) {    
+    const newData = [...this.props.projects];
+    const target = newData.filter(item => key === item.id)[0];
+    if (target) {      
       target[column] = value;
-      this.setState({ data: newData });
+      this.props.editProject(target);
+    }    
+  }
+
+  editItem(key: string) {    
+    const target = this.props.projects.filter(item => key === item.id)[0];
+    if (target) {      
+      this.props.editProject(target);
     }
   }
-  edit(key: string) {
-    const newData = [...this.state.data];
-    const target = newData.filter(item => key === item.key)[0];
+  saveItem(key: string) {
+    const newData = [...this.props.projects];
+    const target = newData.filter(item => key === item.id)[0];
+    if (target) {      
+      this.props.updateProject(target);      
+    }
+  }
+  cancelItem(key: string) {
+    const newData = [...this.props.projects];
+    const target = newData.filter(item => key === item.id)[0];
     if (target) {
-      target.editable = true;
-      this.setState({ data: newData });
+      // TODO: Reload data to undo last change
+      // Object.assign(target, this.cacheData.filter(item => key === item.id)[0]);      
+      this.props.updateProject(target);
     }
   }
-  save(key: string) {
-    const newData = [...this.state.data];
-    const target = newData.filter(item => key === item.key)[0];
-    if (target) {
-      delete target.editable;
-      this.setState({ data: newData });
-      this.cacheData = newData.map(item => ({ ...item }));
+  deleteItem(key: string) {
+    const newData = [...this.props.projects];
+    const target = newData.filter(item => key === item.id)[0];
+    if (target) {      
+      this.props.deleteProject(target);      
     }
-  }
-  cancel(key: string) {
-    const newData = [...this.state.data];
-    const target = newData.filter(item => key === item.key)[0];
-    if (target) {
-      Object.assign(target, this.cacheData.filter(item => key === item.key)[0]);
-      delete target.editable;
-      this.setState({ data: newData });
-    }
-  }
-  delete(key: string) {
-    const newData = [...this.state.data].filter(item => key !== item.key);    
-    this.setState({ data: newData });
-    this.cacheData = newData.map(item => ({ ...item }));    
   }
   render() {
-    return <Table bordered={true} dataSource={this.state.data} columns={this.columns} />;
+    return <Table bordered={true} dataSource={this.props.projects} columns={this.columns} />;
   }
 }
-
+    
 export default Projects;

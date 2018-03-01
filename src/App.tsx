@@ -3,7 +3,7 @@ import './App.css';
 import { Button } from 'antd';
 import { Project } from './types/index';
 // import Project from './components/Project';
-import Projects from './components/Projects';
+import Projects from './containers/Projects';
 
 const logo = require('./logo.svg');
 
@@ -13,10 +13,11 @@ class App extends React.Component {
     this.projects = [];
     for (let i = 0; i < 10; i++) {
       this.projects.push({
-        key: i.toString(),
+        id: i.toString(),
         name: `Edrward ${i}`,
         hourlyRate: i,
-        currency: 'USD'        
+        currency: 'USD',
+        timeSpent: 0        
       });
     }
     return (
@@ -28,7 +29,7 @@ class App extends React.Component {
         <p className="App-intro">
           To get started, edit <code>src/App.tsx</code> and save to reload.
         </p>
-        <Projects projects={this.projects} />
+        <Projects />
         <Button type="primary">Button</Button>
       </div>
     );
