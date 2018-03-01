@@ -82,8 +82,7 @@ class Projects extends React.Component<Props, {}> {
   }
 
   handleChange(value: string, key: string, column: string) {    
-    const newData = [...this.props.projects];
-    const target = newData.filter(item => key === item.id)[0];
+    const target = this.props.projects.filter(item => key === item.id)[0];
     if (target) {      
       target[column] = value;
       this.props.editProject(target);
@@ -97,15 +96,13 @@ class Projects extends React.Component<Props, {}> {
     }
   }
   saveItem(key: string) {
-    const newData = [...this.props.projects];
-    const target = newData.filter(item => key === item.id)[0];
+    const target = this.props.projects.filter(item => key === item.id)[0];
     if (target) {      
       this.props.updateProject(target);      
     }
   }
-  cancelItem(key: string) {
-    const newData = [...this.props.projects];
-    const target = newData.filter(item => key === item.id)[0];
+  cancelItem(key: string) {    
+    const target = this.props.projects.filter(item => key === item.id)[0];
     if (target) {
       // TODO: Reload data to undo last change
       // Object.assign(target, this.cacheData.filter(item => key === item.id)[0]);      
@@ -120,7 +117,7 @@ class Projects extends React.Component<Props, {}> {
     }
   }
   render() {
-    return <Table bordered={true} dataSource={this.props.projects} columns={this.columns} />;
+    return <Table rowKey={'id'} bordered={true} dataSource={this.props.projects} columns={this.columns} />;
   }
 }
     
