@@ -1,13 +1,17 @@
 import * as React from 'react';
 import { Project } from '../types/index';
-import { Table, Input, Popconfirm, Icon } from 'antd';
+import { Table, Input, Popconfirm, Icon, Button } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
+import CreateProject from './CreateProject';
 
 export interface Props {
     projects: Project[];  
+    // showCreateDialog: boolean;
     editProject: (item: Project) => void;  
     updateProject: (item: Project) => void;
     deleteProject: (item: Project) => void;
+    // showCreateProjectDialog: () => void;
+    // hideCreateProjectDialog: () => void;
 }
 
 export interface CellProps {
@@ -25,12 +29,12 @@ const EditableCell = ({ editable, value, onChange }: CellProps) => (
   </div>
 );
 
-class Projects extends React.Component<Props, {}> {  
+class ProjectList extends React.Component<Props, {showCreateDialog: boolean}> {  
   columns: ColumnProps<Project>[];   
+  form: any;
   constructor(props: Props) {
-    super(props);    
-    // tslint:disable-next-line:no-console
-    console.log('3', props.projects);
+    super(props);       
+    this.state = { showCreateDialog: false }; 
     this.columns = [];
     this.columns.push(this.createColumn('name', 'Name', '40%'));
     this.columns.push(this.createColumn('hourlyRate', 'Hourly rate', '20%'));
@@ -116,9 +120,53 @@ class Projects extends React.Component<Props, {}> {
       this.props.deleteProject(target);      
     }
   }
+
+  showModal = () => {        
+    this.setState({ showCreateDialog: true });
+  }
+  handleCancel = () => {
+    this.setState({ showCreateDialog: false });
+  }
+  handleCreate = () => {
+    const form = this.form;
+    form.validateFields((err: any, values: any) => {
+      if (err) {
+        return;
+      }
+
+      // tslint:disable-next-line:no-console
+      console.log('Received values of form: ', values);
+      form.resetFields();
+      this.setState({ showCreateDialog: false });
+    });
+  }
+
+  saveFormRef = (form: any) => {
+    this.form = form;
+  }
+
   render() {
-    return <Table rowKey={'id'} bordered={true} dataSource={this.props.projects} columns={this.columns} />;
+    return (
+      <div>        
+        <Table 
+          className="App-component" 
+          rowKey={'id'} 
+          bordered={true} 
+          dataSource={this.props.projects} 
+          columns={this.columns} 
+        />
+        <div className="App-component" style={{textAlign: 'left', marginTop: '-55px'}}>
+          <Button type="primary" onClick={this.showModal}>Create new project</Button>        
+        </div>
+        <CreateProject 
+          ref={this.saveFormRef}
+          show={this.state.showCreateDialog}
+          onCancel={this.handleCancel}
+          onCreate={this.handleCreate}
+        />
+      </div>
+    );
   }
 }
     
-export default Projects;
+export default ProjectList;

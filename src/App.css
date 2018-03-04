@@ -33,7 +33,21 @@
 
 .App-icon { 
   cursor: pointer;
-  fontSize: 16; 
+  font-size: 16; 
   color: #08c;
   margin-right: 8px;
+}
+
+.App-component {
+  margin: 8px;
+}
+
+.green-button {
+  background-color: #3da62a;
+  border-color: #3da62a;
+}
+
+.green-button:hover {
+  background-color: #5ab34a;
+  border-color: #5ab34a;
 }

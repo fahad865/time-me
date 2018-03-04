@@ -3,7 +3,9 @@ import { Project } from '../types';
 import { ProjectAction } from '../actions/projectActions';
 import { initialState } from './index';
 
-export default function projectReducer(state: Project[] = initialState.projects, action: ProjectAction): Project[] {
+export default function projectReducer(
+    state: Project[] = initialState.projects, 
+    action: ProjectAction) {
     switch (action.type) {
         case types.LOAD_PROJECTS_SUCCESS:
             return action.projects;
@@ -18,7 +20,19 @@ export default function projectReducer(state: Project[] = initialState.projects,
                 return item.id === action.project.id ? action.project : item;
             });
         case types.DELETE_PROJECT_SUCCESS:
-            return [...state.filter(project => project.id !== action.project.id)];
+            return state.filter(project => project.id !== action.project.id);
+            
+        /*
+        case types.SHOW_CREATE_PROJECT_DIALOG:
+            return {
+                projects: state,
+                showCreateProjectDialog: true
+            };
+        case types.HIDE_CREATE_PROJECT_DIALOG:
+            return {
+                projects: state,
+                showCreateProjectDialog: false
+            };*/
         default:            
             return state;    
     }

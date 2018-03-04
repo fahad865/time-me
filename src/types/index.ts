@@ -1,5 +1,6 @@
 export interface StoreState {
   projects: Project[];
+  // showCreateProjectDialog?: boolean;
   // timeRegistrations: TimeRegistration[];  
 }
 
@@ -10,7 +11,7 @@ export interface Project {
   currency: string;
   timeSpent: number;
   editable?: boolean;
-  operation?: string;
+  operation?: string;  
 }
 
 export interface TimeRegistration {

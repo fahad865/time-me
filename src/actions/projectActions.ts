@@ -52,8 +52,17 @@ export interface LoadProjectsSuccess {
     projects: Project[];
 }
 
+export interface ShowCreateProjectDialog {
+    type: types.SHOW_CREATE_PROJECT_DIALOG;
+}
+
+export interface HideCreateProjectDialog {
+    type: types.HIDE_CREATE_PROJECT_DIALOG;
+}
+
 export type ProjectAction = AddProjectSuccess | UpdateProjectSuccess | DeleteProjectSuccess | LoadProjectsSuccess
-    | AddProject | EditProject | UpdateProject | DeleteProject | LoadProjects;
+    | AddProject | EditProject | UpdateProject | DeleteProject | LoadProjects | ShowCreateProjectDialog
+    | HideCreateProjectDialog;
 
 function updateProjectSuccess(project: Project): UpdateProjectSuccess {
     return {
@@ -70,8 +79,6 @@ function deleteProjectSuccess(project: Project): DeleteProjectSuccess {
 }
 
 function loadProjectsSuccess(projects: Project[]): LoadProjectsSuccess {
-    // tslint:disable-next-line:no-console
-    console.log('2', projects);
     return {
         type: types.LOAD_PROJECTS_SUCCESS,
         projects        
@@ -86,8 +93,6 @@ export function editProject(project: Project): EditProject {
 }
 
 export function loadProjects() {
-    // tslint:disable-next-line:no-console
-    console.log('1');
     return function(dispatch: Dispatch<ProjectAction>) {
         return projectApi.loadProjects().then((response) => {
             dispatch(loadProjectsSuccess(response));
@@ -117,5 +122,17 @@ export function deleteProject(project: Project) {
         .catch(error => {            
             throw (error);
         });
+    };
+}
+
+export function showCreateProjectDialog(): ShowCreateProjectDialog {
+    return {
+        type: types.SHOW_CREATE_PROJECT_DIALOG,
+    };
+}
+
+export function hideCreateProjectDialog(): HideCreateProjectDialog {
+    return {
+        type: types.HIDE_CREATE_PROJECT_DIALOG,
     };
 }

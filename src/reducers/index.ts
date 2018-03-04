@@ -5,6 +5,7 @@ import { rootAction } from '../actions';
 
 export const initialState: StoreState = {
     projects: [],
+    // showCreateProjectDialog: false,
     // timeRegistrations: []
 };
 

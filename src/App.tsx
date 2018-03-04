@@ -1,36 +1,16 @@
 import * as React from 'react';
 import './App.css';
-import { Button } from 'antd';
-import { Project } from './types/index';
-// import Project from './components/Project';
-import Projects from './containers/Projects';
+import ProjectList from './containers/ProjectList';
+import Header from './components/common/Header';
 
-const logo = require('./logo.svg');
+// const logo = require('./logo.svg');
 
 class App extends React.Component {
-  projects: Project[];
   render() {
-    this.projects = [];
-    for (let i = 0; i < 10; i++) {
-      this.projects.push({
-        id: i.toString(),
-        name: `Edrward ${i}`,
-        hourlyRate: i,
-        currency: 'USD',
-        timeSpent: 0        
-      });
-    }
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <Projects />
-        <Button type="primary">Button</Button>
+      <div className="App">           
+        <Header />   
+        <ProjectList />        
       </div>
     );
   }
