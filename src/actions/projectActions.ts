@@ -52,17 +52,8 @@ export interface LoadProjectsSuccess {
     projects: Project[];
 }
 
-export interface ShowCreateProjectDialog {
-    type: types.SHOW_CREATE_PROJECT_DIALOG;
-}
-
-export interface HideCreateProjectDialog {
-    type: types.HIDE_CREATE_PROJECT_DIALOG;
-}
-
 export type ProjectAction = AddProjectSuccess | UpdateProjectSuccess | DeleteProjectSuccess | LoadProjectsSuccess
-    | AddProject | EditProject | UpdateProject | DeleteProject | LoadProjects | ShowCreateProjectDialog
-    | HideCreateProjectDialog;
+    | AddProject | EditProject | UpdateProject | DeleteProject | LoadProjects;
 
 function updateProjectSuccess(project: Project): UpdateProjectSuccess {
     return {
@@ -122,17 +113,5 @@ export function deleteProject(project: Project) {
         .catch(error => {            
             throw (error);
         });
-    };
-}
-
-export function showCreateProjectDialog(): ShowCreateProjectDialog {
-    return {
-        type: types.SHOW_CREATE_PROJECT_DIALOG,
-    };
-}
-
-export function hideCreateProjectDialog(): HideCreateProjectDialog {
-    return {
-        type: types.HIDE_CREATE_PROJECT_DIALOG,
     };
 }

@@ -12,8 +12,6 @@ export type DispatchFromProps = {
     editProject: (item: Project) => void;
     updateProject: (item: Project) => void;
     deleteProject: (item: Project) => void;
-    // showCreateProjectDialog: () => void;
-    // hideCreateProjectDialog: () => void;
 };
 
 export function mapStateToProps({ projects }: StoreState) {
@@ -26,8 +24,6 @@ export const mapDispatchToProps = (dispatch: Dispatch<Project>): DispatchFromPro
     editProject: (item: Project) => dispatch(actions.editProject(item)),
     updateProject: (item: Project) => dispatch(actions.updateProject(item)),
     deleteProject: (item: Project) => dispatch(actions.deleteProject(item)),
-    // showCreateProjectDialog: () => dispatch(actions.showCreateProjectDialog()),
-    // hideCreateProjectDialog: () => dispatch(actions.hideCreateProjectDialog())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectList);

@@ -5,13 +5,10 @@ import { ColumnProps } from 'antd/lib/table';
 import CreateProject from './CreateProject';
 
 export interface Props {
-    projects: Project[];  
-    // showCreateDialog: boolean;
+    projects: Project[];      
     editProject: (item: Project) => void;  
     updateProject: (item: Project) => void;
-    deleteProject: (item: Project) => void;
-    // showCreateProjectDialog: () => void;
-    // hideCreateProjectDialog: () => void;
+    deleteProject: (item: Project) => void;    
 }
 
 export interface CellProps {
