@@ -1,27 +1,28 @@
 import * as React from 'react';
-import { Project } from '../types/index';
+import { TimeLog } from '../types/index';
 import { Table, Popconfirm, Icon, Button } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import CreateProject from './CreateProject';
+import CreateTimeLog from './CreateTimeLog';
 import EditableCell from './common/EditableCell';
 
 export interface Props {
-  projects: Project[];
-  editProject: (item: Project) => void;
-  updateProject: (item: Project) => void;
-  deleteProject: (item: Project) => void;
+  timeLogs: TimeLog[];
+  editTimeLog: (item: TimeLog) => void;
+  saveTimeLog: (item: TimeLog) => void;
+  deleteTimeLog: (item: TimeLog) => void;
 }
 
-class ProjectList extends React.Component<Props, { showCreateDialog: boolean }> {
-  columns: ColumnProps<Project>[];
+class TimeLogList extends React.Component<Props, { showCreateDialog: boolean }> {
+  columns: ColumnProps<TimeLog>[];
   form: any;
   constructor(props: Props) {
     super(props);
     this.state = { showCreateDialog: false };
     this.columns = [];
-    this.columns.push(this.createColumn('name', 'Name', '40%'));
-    this.columns.push(this.createColumn('hourlyRate', 'Hourly rate', '20%'));
-    this.columns.push(this.createColumn('currency', 'Currency', '20%'));
+    this.columns.push(this.createColumn('description', 'Description', '30%'));
+    this.columns.push(this.createColumn('projectId', 'Project', '20%'));
+    this.columns.push(this.createColumn('startTime', 'Start time', '15%'));
+    this.columns.push(this.createColumn('endTime', 'End time', '15%'));
     this.columns.push({
       title: 'Operation',
       dataIndex: 'operation',
@@ -69,38 +70,38 @@ class ProjectList extends React.Component<Props, { showCreateDialog: boolean }> 
   }
 
   handleChange(value: string, key: string, column: string) {
-    const target = this.props.projects.filter(item => key === item.id)[0];
+    const target = this.props.timeLogs.filter(item => key === item.id)[0];
     if (target) {
       target[column] = value;
-      this.props.editProject(target);
+      this.props.editTimeLog(target);
     }
   }
 
   editItem(key: string) {
-    const target = this.props.projects.filter(item => key === item.id)[0];
+    const target = this.props.timeLogs.filter(item => key === item.id)[0];
     if (target) {
-      this.props.editProject(target);
+      this.props.editTimeLog(target);
     }
   }
   saveItem(key: string) {
-    const target = this.props.projects.filter(item => key === item.id)[0];
+    const target = this.props.timeLogs.filter(item => key === item.id)[0];
     if (target) {
-      this.props.updateProject(target);
+      this.props.saveTimeLog(target);
     }
   }
   cancelItem(key: string) {
-    const target = this.props.projects.filter(item => key === item.id)[0];
+    const target = this.props.timeLogs.filter(item => key === item.id)[0];
     if (target) {
       // TODO: Reload data to undo last change
       // Object.assign(target, this.cacheData.filter(item => key === item.id)[0]);      
-      this.props.updateProject(target);
+      this.props.saveTimeLog(target);
     }
   }
   deleteItem(key: string) {
-    const newData = [...this.props.projects];
+    const newData = [...this.props.timeLogs];
     const target = newData.filter(item => key === item.id)[0];
     if (target) {
-      this.props.deleteProject(target);
+      this.props.deleteTimeLog(target);
     }
   }
 
@@ -135,13 +136,13 @@ class ProjectList extends React.Component<Props, { showCreateDialog: boolean }> 
           className="App-component"
           rowKey={'id'}
           bordered={true}
-          dataSource={this.props.projects}
+          dataSource={this.props.timeLogs}
           columns={this.columns}
         />
         <div className="App-component" style={{ textAlign: 'left', marginTop: '-57px' }}>
-          <Button type="primary" icon="plus-circle" onClick={this.showModal}>New project</Button>
+          <Button type="primary" icon="plus-circle" onClick={this.showModal}>New timeLog</Button>
         </div>
-        <CreateProject
+        <CreateTimeLog
           ref={this.saveFormRef}
           show={this.state.showCreateDialog}
           onCancel={this.handleCancel}
@@ -152,4 +153,4 @@ class ProjectList extends React.Component<Props, { showCreateDialog: boolean }> 
   }
 }
 
-export default ProjectList;
+export default TimeLogList;

@@ -1,16 +1,28 @@
 import { combineReducers } from 'redux';
 import projects from './projectReducer';
+import timer from './timerReducer';
+import timeLogs from './timeLogReducer';
 import { StoreState } from '../types';
 import { rootAction } from '../actions';
 
 export const initialState: StoreState = {
-    projects: [],
-    // showCreateProjectDialog: false,
-    // timeRegistrations: []
+  projects: [],
+  timeLogs: [],
+  timer: {
+    timeElapsed: 0,
+    timeLog: {
+      id: '',
+      description: '',
+      projectId: ''
+    },
+    isRunning: false
+  }
 };
 
 const appReducer = combineReducers<StoreState>({
-  projects
+  projects,
+  timeLogs,
+  timer
 });
 
 const rootReducer = (state: StoreState, action: rootAction) => {

@@ -1,5 +1,7 @@
 export interface StoreState {
   projects: Project[];
+  timeLogs: TimeLog[];
+  timer: RunningTimer;
   // showCreateProjectDialog?: boolean;
   // timeRegistrations: TimeRegistration[];  
 }
@@ -11,12 +13,21 @@ export interface Project {
   currency: string;
   timeSpent: number;
   editable?: boolean;
-  operation?: string;  
+  operation?: string;
 }
 
-export interface TimeRegistration {
+export interface TimeLog {
+  id: string;
   description: string;
-  startTime: Date;
-  endTime: Date;
+  startTime?: Date;
+  endTime?: Date;
   projectId: string;
+  editable?: boolean;
+  operation?: string;
+}
+
+export interface RunningTimer {
+  timeElapsed: number;
+  timeLog: TimeLog;
+  isRunning: boolean;
 }

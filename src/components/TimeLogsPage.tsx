@@ -1,17 +1,17 @@
 import * as React from 'react';
 import '../App.css';
-import ProjectList from '../containers/ProjectList';
+import TimeLogList from '../containers/TimeLogList';
 import Header from './common/Header';
 
 // const logo = require('./logo.svg');
 
-function ProjectsPage() {
+function TimeLogsPage() {
   return (
     <div className="App">
       <Header />
-      <ProjectList />
+      <TimeLogList />
     </div>
   );
 }
 
-export default ProjectsPage;
+export default TimeLogsPage;
