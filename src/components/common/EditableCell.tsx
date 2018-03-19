@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Input } from 'antd';
+import { Input, DatePicker } from 'antd';
+import * as moment from 'moment';
 
 export interface CellProps {
   editable: boolean;
@@ -9,9 +10,22 @@ export interface CellProps {
 
 const EditableCell = ({ editable, value, onChange }: CellProps) => (
   <div>
-    {editable
-      ? <Input style={{ margin: '-5px 0' }} value={value} onChange={e => onChange(e.target.value)} />
-      : value
+    {
+      moment.isDate(value)
+        ? (editable
+          ? <DatePicker
+            showTime={true}
+            format="YYYY-MM-DD HH:mm:ss"
+            placeholder="Select Time"
+            style={{ margin: '-5px 0' }}
+            value={moment(value)}
+            onChange={onChange}
+          />
+          : moment(value).format('YYYY-MM-DD (HH:mm:ss)'))
+        :
+        (editable
+          ? <Input style={{ margin: '-5px 0' }} value={value} onChange={e => onChange(e.target.value)} />
+          : value)
     }
   </div>
 );

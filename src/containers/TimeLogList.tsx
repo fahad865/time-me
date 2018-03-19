@@ -5,7 +5,6 @@ import * as actions from '../actions/timeLogActions';
 
 export type StateFromProps = {
   timeLogs: TimeLog[];
-  // showCreateTimeLogDialog?: boolean;
 };
 
 export type DispatchFromProps = {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './App.css';
-import ProjectList from './containers/ProjectList';
+// import TimeLogList from './containers/TimeLogList';
 import Header from './components/common/Header';
 
 // const logo = require('./logo.svg');
@@ -8,9 +8,9 @@ import Header from './components/common/Header';
 class App extends React.Component {
   render() {
     return (
-      <div className="App">           
-        <Header />   
-        <ProjectList />        
+      <div className="App">
+        <Header />
+        Click the play icon to start logging activities
       </div>
     );
   }

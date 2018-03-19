@@ -89,7 +89,7 @@ export function loadTimer() {
   return function (dispatch: Dispatch<TimerAction>) {
     return timeLogApi.getActiveTimer().then((response) => {
       dispatch(loadTimerSuccess((response) ? {
-        timeElapsed: Date.now() - response.startTime!.getTime() / 1000,
+        timeElapsed: (Date.now() - response.startTime!.getTime()) / 1000,
         timeLog: response,
         isRunning: true
       } : {

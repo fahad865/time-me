@@ -117,8 +117,6 @@ class ProjectList extends React.Component<Props, { showCreateDialog: boolean }> 
         return;
       }
 
-      // tslint:disable-next-line:no-console
-      console.log('Received values of form: ', values);
       form.resetFields();
       this.setState({ showCreateDialog: false });
     });

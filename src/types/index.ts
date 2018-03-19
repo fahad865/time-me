@@ -2,8 +2,6 @@ export interface StoreState {
   projects: Project[];
   timeLogs: TimeLog[];
   timer: RunningTimer;
-  // showCreateProjectDialog?: boolean;
-  // timeRegistrations: TimeRegistration[];  
 }
 
 export interface Project {
@@ -30,4 +28,5 @@ export interface RunningTimer {
   timeElapsed: number;
   timeLog: TimeLog;
   isRunning: boolean;
+  timerHandle?: any;
 }

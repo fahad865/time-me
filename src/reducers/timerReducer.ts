@@ -5,6 +5,8 @@ import { initialState } from './index';
 
 export default function timerReducer(state: RunningTimer = initialState.timer, action: TimerAction) {
   switch (action.type) {
+    case types.LOAD_TIMER_SUCCESS:
+      return action.timer;
     case types.START_TIMER_SUCCESS:
       return action.timer;
     case types.STOP_TIMER_SUCCESS:

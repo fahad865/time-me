@@ -118,8 +118,6 @@ class TimeLogList extends React.Component<Props, { showCreateDialog: boolean }> 
         return;
       }
 
-      // tslint:disable-next-line:no-console
-      console.log('Received values of form: ', values);
       form.resetFields();
       this.setState({ showCreateDialog: false });
     });
@@ -140,7 +138,7 @@ class TimeLogList extends React.Component<Props, { showCreateDialog: boolean }> 
           columns={this.columns}
         />
         <div className="App-component" style={{ textAlign: 'left', marginTop: '-57px' }}>
-          <Button type="primary" icon="plus-circle" onClick={this.showModal}>New timeLog</Button>
+          <Button type="primary" icon="plus-circle" onClick={this.showModal}>Manual time log</Button>
         </div>
         <CreateTimeLog
           ref={this.saveFormRef}

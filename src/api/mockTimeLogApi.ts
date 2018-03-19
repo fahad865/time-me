@@ -22,7 +22,7 @@ const timeLogs: TimeLog[] = [
     id: 'log-2',
     description: 'Task 2',
     startTime: new Date(),
-    endTime: new Date(),
+    // endTime: new Date(),
     projectId: '2'
   },
   {
@@ -43,7 +43,7 @@ class TimeLogApi {
   static loadTimeLogs() {
     return new Promise<TimeLog[]>((resolve, reject) => {
       setTimeout(() => {
-        resolve(timeLogs.filter((item) => !!item.endTime));
+        resolve(timeLogs.filter((item) => item.endTime));
       }, delay);
     });
   }
@@ -71,7 +71,6 @@ class TimeLogApi {
           timeLog.id = generateId(timeLog);
           timeLogs.push(timeLog);
         }
-
         resolve(timeLog);
       }, delay);
     });
