@@ -12,59 +12,45 @@ export interface Props {
   stopTimer: (item: RunningTimer) => void;
   loadTimeLogs: () => void;
   handleTimerChange: (item: RunningTimer) => void;
+  incrementTimer: () => void;
 }
 
 class Timer extends React.Component<Props, { timerHandle: any }> {
-  // timerHandle: any;
   constructor(props: Props) {
     super(props);
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    // tslint:disable-next-line:no-debugger
-    // debugger;
-    // if (!this.timerHandle && !!nextProps.timer.timeLog.id) {
-    if (nextProps.timer.isRunning && !this.props.timer.isRunning) {
-      // tslint:disable-next-line:no-console
-      // console.log('in1', this.timerHandle);
-      // tslint:disable-next-line:no-console
-      console.log('in2', nextProps.timer);
+    // tslint:disable-next-line:no-console
+    console.log('timer1', this.props.timer.timeLog.id);
+    // tslint:disable-next-line:no-console
+    console.log('timer2', nextProps.timer.timeLog.id);
+    // tslint:disable-next-line:no-console
+    console.log('timer3', this.props.timer.timerHandle);
+    if (nextProps.timer.timeLog.id !== this.props.timer.timeLog.id && this.props.timer.timerHandle) {
+      clearInterval(this.props.timer.timerHandle);
+    }
+    if (nextProps.timer.isRunning && !nextProps.timer.timerHandle) {
       const newHandle = setInterval(this.updateElapsedTime, 1000);
-      const timer = Object.assign({}, nextProps.timer);
+      const timer = { ...nextProps.timer };
       timer.timerHandle = newHandle;
       nextProps.handleTimerChange(timer);
-      // this.setState({ timerHandle: newHandle });
     }
-  }
-
-  getElapsedTime = (startTime: Date) => {
-    return Math.floor((Date.now() - startTime.getTime()) / 1000);
   }
 
   startTimer = () => {
     const timer = Object.assign({}, this.props.timer);
     this.props.startTimer(timer);
-    // this.timerHandle = setInterval(this.updateElapsedTime, 1000);
   }
 
   stopTimer = () => {
-    // tslint:disable-next-line:no-debugger
-    debugger;
     const timer = Object.assign({}, this.props.timer);
     this.props.stopTimer(timer);
-    this.props.loadTimeLogs();
-    clearInterval(timer.timerHandle);
-    // this.setState({ timerHandle: undefined });
+    // clearInterval(timer.timerHandle);
   }
 
   updateElapsedTime = () => {
-    if (this.props.timer.timeLog.startTime) {
-      const timer = Object.assign({}, this.props.timer);
-      timer.timeElapsed = this.getElapsedTime(timer.timeLog.startTime!);
-      this.props.handleTimerChange(timer);
-    } else {
-      // clearInterval(this.timerHandle);
-    }
+    this.props.incrementTimer();
   }
 
   handleDescriptionChange = (event: any) => {
@@ -115,7 +101,7 @@ class Timer extends React.Component<Props, { timerHandle: any }> {
             }
           </Col>
           <Col>
-            <ElapsedTime elapsedTime={this.props.timer.timeElapsed} />
+            <ElapsedTime elapsedTime={this.props.timer.timeLog.timeElapsed} />
           </Col>
         </Row>
       </div>

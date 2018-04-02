@@ -1,6 +1,6 @@
 import types from './actionTypes';
 import { Project } from '../types';
-import projectApi from '../api/mockProjectApi';
+import projectApi from '../api/projectApi';
 import { Dispatch } from 'react-redux';
 
 export interface EditProject {
@@ -8,8 +8,8 @@ export interface EditProject {
   project: Project;
 }
 
-export interface AddProjectSuccess {
-  type: types.ADD_PROJECT_SUCCESS;
+export interface CreateProjectSuccess {
+  type: types.CREATE_PROJECT_SUCCESS;
   project: Project;
 }
 
@@ -28,12 +28,29 @@ export interface LoadProjectsSuccess {
   projects: Project[];
 }
 
-export type ProjectAction = AddProjectSuccess | UpdateProjectSuccess | DeleteProjectSuccess | LoadProjectsSuccess
-  | EditProject;
+export interface GetProjectSuccess {
+  type: types.GET_PROJECT_SUCCESS;
+  project: Project;
+}
+
+interface ProjectUpdated {
+  type: types.PROJECT_UPDATED;
+  data: string;
+}
+
+export type ProjectAction = CreateProjectSuccess | UpdateProjectSuccess | DeleteProjectSuccess | LoadProjectsSuccess
+  | EditProject | GetProjectSuccess;
 
 function updateProjectSuccess(project: Project): UpdateProjectSuccess {
   return {
     type: types.UPDATE_PROJECT_SUCCESS,
+    project
+  };
+}
+
+function createProjectSuccess(project: Project): CreateProjectSuccess {
+  return {
+    type: types.CREATE_PROJECT_SUCCESS,
     project
   };
 }
@@ -59,10 +76,26 @@ export function editProject(project: Project): EditProject {
   };
 }
 
+function getProjectSuccess(project: Project): GetProjectSuccess {
+  return {
+    type: types.GET_PROJECT_SUCCESS,
+    project
+  };
+}
+
+function projectUpdated(id: string): ProjectUpdated {
+  return {
+    type: types.PROJECT_UPDATED,
+    data: id
+  };
+}
+
 export function loadProjects() {
   return function (dispatch: Dispatch<ProjectAction>) {
-    return projectApi.loadProjects().then((response) => {
-      dispatch(loadProjectsSuccess(response));
+    return projectApi.loadProjects().then(response => response.json()).then(response => {
+      dispatch(loadProjectsSuccess(response.map((value: any) => {
+        return { ...value, id: value._id };
+      })));
     })
       .catch(error => {
         throw (error);
@@ -70,10 +103,35 @@ export function loadProjects() {
   };
 }
 
-export function updateProject(project: Project) {
+export function getProject(id: string) {
   return function (dispatch: Dispatch<ProjectAction>) {
-    return projectApi.updateProject(project).then((response) => {
-      dispatch(updateProjectSuccess(response));
+    return projectApi.getProject(id).then(response => response.json()).then(response => {
+      dispatch(getProjectSuccess({
+        ...response,
+        id: response._id,
+      }));
+    })
+      .catch(error => {
+        throw (error);
+      });
+  };
+}
+
+export function saveProject(project: Project) {
+  return function (dispatch: Dispatch<ProjectAction>) {
+    return projectApi.saveProject(project).then(response => response.json()).then(response => {
+      if (project.id) {
+        dispatch(updateProjectSuccess({
+          ...response,
+          id: response._id,
+        }));
+      } else {
+        dispatch(createProjectSuccess({
+          ...response,
+          id: response._id,
+        }));
+      }
+      dispatch(projectUpdated(response._id));
     })
       .catch(error => {
         throw (error);
@@ -84,7 +142,8 @@ export function updateProject(project: Project) {
 export function deleteProject(project: Project) {
   return function (dispatch: Dispatch<ProjectAction>) {
     return projectApi.deleteProject(project).then((response) => {
-      dispatch(deleteProjectSuccess(response));
+      dispatch(deleteProjectSuccess(project));
+      dispatch(projectUpdated(project.id));
     })
       .catch(error => {
         throw (error);

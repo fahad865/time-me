@@ -19,8 +19,14 @@ export default function timeLogReducer(
       return state.map(item => {
         return item.id === action.timeLog.id ? action.timeLog : item;
       });
+    case types.CREATE_TIMELOG_SUCCESS:
+      return [...state, action.timeLog];
     case types.DELETE_TIMELOG_SUCCESS:
       return state.filter(timeLog => timeLog.id !== action.timeLog.id);
+    case types.GET_TIMELOG_SUCCESS:
+      return state.map(item => {
+        return item.id === action.timeLog.id ? action.timeLog : item;
+      });
     default:
       return state;
   }

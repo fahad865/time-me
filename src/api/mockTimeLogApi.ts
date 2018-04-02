@@ -8,6 +8,7 @@ export interface TimeLog {
   startTime?: Date;
   endTime?: Date;
   projectId: string;
+  timeElapsed: number;
 }
 
 const timeLogs: TimeLog[] = [
@@ -16,21 +17,24 @@ const timeLogs: TimeLog[] = [
     description: 'Task 1',
     startTime: new Date(),
     endTime: new Date(),
-    projectId: '1'
+    projectId: '1',
+    timeElapsed: 0
   },
   {
     id: 'log-2',
     description: 'Task 2',
     startTime: new Date(),
     // endTime: new Date(),
-    projectId: '2'
+    projectId: '2',
+    timeElapsed: 0
   },
   {
     id: 'log-3',
     description: 'Task 3',
     startTime: new Date(),
     endTime: new Date(),
-    projectId: '3'
+    projectId: '3',
+    timeElapsed: 0
   }
 ];
 
@@ -51,6 +55,10 @@ class TimeLogApi {
   static getActiveTimer() {
     return new Promise<TimeLog>((resolve, reject) => {
       setTimeout(() => {
+        let timer = timeLogs.filter((item) => !item.endTime)[0];
+        if (timer) {
+          timer.timeElapsed = Math.floor((Date.now() - timer.startTime!.getTime()) / 1000);
+        }
         resolve(timeLogs.filter((item) => !item.endTime)[0]);
       }, delay);
     });

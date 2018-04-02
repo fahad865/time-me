@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { Project } from '../types/index';
-import { Table, Popconfirm, Icon, Button } from 'antd';
+import { Table, Icon, Button } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import CreateProject from './CreateProject';
 import EditableCell from './common/EditableCell';
 
 export interface Props {
   projects: Project[];
+  getProject: (id: string) => void;
   editProject: (item: Project) => void;
-  updateProject: (item: Project) => void;
+  saveProject: (item: Project) => void;
   deleteProject: (item: Project) => void;
 }
 
@@ -33,9 +34,7 @@ class ProjectList extends React.Component<Props, { showCreateDialog: boolean }> 
               editable ?
                 <span>
                   <a onClick={() => this.saveItem(record.id)}>Save</a>
-                  <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancelItem(record.id)}>
-                    <a>Cancel</a>
-                  </Popconfirm>
+                  <a onClick={() => this.cancelItem(record.id)}>Cancel</a>
                 </span>
                 :
                 <span>
@@ -82,20 +81,18 @@ class ProjectList extends React.Component<Props, { showCreateDialog: boolean }> 
       this.props.editProject(target);
     }
   }
+
   saveItem(key: string) {
     const target = this.props.projects.filter(item => key === item.id)[0];
     if (target) {
-      this.props.updateProject(target);
+      this.props.saveProject(target);
     }
   }
+
   cancelItem(key: string) {
-    const target = this.props.projects.filter(item => key === item.id)[0];
-    if (target) {
-      // TODO: Reload data to undo last change
-      // Object.assign(target, this.cacheData.filter(item => key === item.id)[0]);      
-      this.props.updateProject(target);
-    }
+    this.props.getProject(key);
   }
+
   deleteItem(key: string) {
     const newData = [...this.props.projects];
     const target = newData.filter(item => key === item.id)[0];
@@ -108,6 +105,7 @@ class ProjectList extends React.Component<Props, { showCreateDialog: boolean }> 
     this.setState({ showCreateDialog: true });
   }
   handleCancel = () => {
+    this.form.resetFields();
     this.setState({ showCreateDialog: false });
   }
   handleCreate = () => {
@@ -116,7 +114,7 @@ class ProjectList extends React.Component<Props, { showCreateDialog: boolean }> 
       if (err) {
         return;
       }
-
+      this.props.saveProject(values);
       form.resetFields();
       this.setState({ showCreateDialog: false });
     });

@@ -1,7 +1,8 @@
 import types from './actionTypes';
 import { RunningTimer } from '../types';
 import { Dispatch } from 'react-redux';
-import timeLogApi from '../api/mockTimeLogApi';
+import timeLogApi from '../api/timeLogApi';
+import { loadTimeLogs } from './timeLogActions';
 
 export interface StartTimerSuccess {
   type: types.START_TIMER_SUCCESS;
@@ -23,7 +24,16 @@ export interface HandleTimerChange {
   timer: RunningTimer;
 }
 
-export type TimerAction = StartTimerSuccess | StopTimerSuccess | LoadTimerSuccess | HandleTimerChange;
+export interface IncrementTimer {
+  type: types.INCREMENT_TIMER;
+}
+
+interface TimerUpdated {
+  type: types.TIMER_UPDATED;
+  data: string;
+}
+export type TimerAction = StartTimerSuccess | StopTimerSuccess | LoadTimerSuccess | HandleTimerChange
+  | IncrementTimer;
 
 function startTimerSuccess(timer: RunningTimer): StartTimerSuccess {
   return {
@@ -53,14 +63,34 @@ export function handleTimerChange(timer: RunningTimer): HandleTimerChange {
   };
 }
 
+export function incrementTimer(): IncrementTimer {
+  return {
+    type: types.INCREMENT_TIMER,
+  };
+}
+
+function timerUpdated(id: string): TimerUpdated {
+  return {
+    type: types.TIMER_UPDATED,
+    data: id
+  };
+}
+
 export function startTimer(timer: RunningTimer) {
   return function (dispatch: Dispatch<TimerAction>) {
-    return timeLogApi.startTimer(timer.timeLog).then((response) => {
+    return timeLogApi.startTimer(timer.timeLog).then(response => response.json()).then(response => {
       dispatch(startTimerSuccess({
         timeElapsed: 0,
-        timeLog: response,
+        timeLog: {
+          description: response.description,
+          id: response._id,
+          projectId: response.projectId,
+          startTime: response.startTime,
+          timeElapsed: response.timeElapsed
+        },
         isRunning: true
       }));
+      dispatch(timerUpdated(response._id));
     }).catch(error => {
       throw (error);
     });
@@ -75,10 +105,14 @@ export function stopTimer(timer: RunningTimer) {
         timeLog: {
           description: '',
           id: '',
-          projectId: ''
+          projectId: '',
+          timeElapsed: 0
         },
         isRunning: false
       }));
+      clearInterval(timer.timerHandle);
+      dispatch(loadTimeLogs());
+      dispatch(timerUpdated(timer.timeLog.id));
     }).catch(error => {
       throw (error);
     });
@@ -87,22 +121,42 @@ export function stopTimer(timer: RunningTimer) {
 
 export function loadTimer() {
   return function (dispatch: Dispatch<TimerAction>) {
-    return timeLogApi.getActiveTimer().then((response) => {
-      dispatch(loadTimerSuccess((response) ? {
-        timeElapsed: (Date.now() - response.startTime!.getTime()) / 1000,
-        timeLog: response,
-        isRunning: true
-      } : {
+    return timeLogApi.getActiveTimer()
+      .then(handleErrors)
+      .then(response => response.json())
+      .then(response => {
+        dispatch(loadTimerSuccess({
+          timeElapsed: 0,
+          timeLog: {
+            description: response.description,
+            id: response._id,
+            projectId: response.projectId,
+            startTime: response.startTime,
+            timeElapsed: response.timeElapsed
+          },
+          isRunning: true
+        }));
+      })
+      .catch(error => {
+        // tslint:disable-next-line:no-console
+        console.error(error);
+        dispatch(loadTimerSuccess({
           timeElapsed: 0,
           timeLog: {
             description: '',
             id: '',
-            projectId: ''
+            projectId: '',
+            timeElapsed: 0
           },
           isRunning: false
         }));
-    }).catch(error => {
-      throw (error);
-    });
+      });
   };
+}
+
+function handleErrors(response: any) {
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+  return response;
 }

@@ -13,11 +13,36 @@ import { StoreState } from './types';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ProjectsPage from './components/ProjectsPage';
 import TimeLogsPage from './components/TimeLogsPage';
+import * as io from 'socket.io-client';
+import createSocketIoMiddleware from 'redux-socket.io';
 
-const store = createStore<StoreState>(rootReducer, initialState, applyMiddleware(thunk));
+const socket = io('http://localhost:8000');
+const socketIoMiddleware = createSocketIoMiddleware(socket, 'event/');
+const store = createStore<StoreState>(rootReducer, initialState, applyMiddleware(socketIoMiddleware, thunk));
 store.dispatch(loadProjects());
 store.dispatch(loadTimeLogs());
 store.dispatch(loadTimer());
+
+socket.on('refreshProjects', (res: any) => {
+  // tslint:disable-next-line:no-console
+  console.log('Refresh projects!');
+  store.dispatch(loadProjects());
+});
+
+socket.on('refreshTimeLogs', (res: any) => {
+  store.dispatch(loadTimeLogs());
+});
+
+socket.on('refreshTimer', (res: any) => {
+  if (!store.getState().timer.timerHandle) {
+    clearInterval(store.getState().timer.timerHandle);
+    // tslint:disable-next-line:no-console
+    console.log('handle', store.getState().timer.timerHandle);
+  }
+  store.dispatch(loadTimeLogs());
+  store.dispatch(loadTimer());
+});
+
 const Root: React.SFC<{}> = () => (
   <Provider store={store}>
     <Router>

@@ -14,6 +14,7 @@ export type DispatchFromProps = {
   stopTimer: (item: RunningTimer) => void;
   handleTimerChange: (item: RunningTimer) => void;
   loadTimeLogs: () => void;
+  incrementTimer: () => void;
 };
 
 export function mapStateToProps({ projects, timer }: StoreState) {
@@ -28,6 +29,7 @@ export const mapDispatchToProps = (dispatch: Dispatch<RunningTimer | Project[]>)
   stopTimer: (item: RunningTimer) => dispatch(actions.stopTimer(item)),
   loadTimeLogs: () => dispatch(loadTimeLogs()),
   handleTimerChange: (item: RunningTimer) => dispatch(actions.handleTimerChange(item)),
+  incrementTimer: () => dispatch(actions.incrementTimer()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Timer);

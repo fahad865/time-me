@@ -12,7 +12,15 @@ export default function timerReducer(state: RunningTimer = initialState.timer, a
     case types.STOP_TIMER_SUCCESS:
       return action.timer;
     case types.HANDLE_TIMER_CHANGE:
-      return action.timer;
+      return { ...action.timer };
+    case types.INCREMENT_TIMER:
+      return {
+        ...state,
+        timeLog: {
+          ...state.timeLog,
+          timeElapsed: state.timeLog.timeElapsed + 1
+        }
+      };
     default:
       return state;
   }
