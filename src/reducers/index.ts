@@ -13,7 +13,8 @@ export const initialState: StoreState = {
     timeLog: {
       id: '',
       description: '',
-      projectId: ''
+      projectId: '',
+      timeElapsed: 0
     },
     isRunning: false
   }

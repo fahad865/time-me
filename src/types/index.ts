@@ -19,6 +19,7 @@ export interface TimeLog {
   description: string;
   startTime?: Date;
   endTime?: Date;
+  timeElapsed: number;
   projectId: string;
   editable?: boolean;
   operation?: string;
