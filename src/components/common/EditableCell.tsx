@@ -15,17 +15,18 @@ const EditableCell = ({ editable, value, onChange }: CellProps) => (
         ? (editable
           ? <DatePicker
             showTime={true}
+            allowClear={false}
             format="DD-MM-YYYY HH:mm:ss"
             placeholder="Select Time"
-            style={{ margin: '-5px 0' }}
+            style={{ width: '100%', margin: '-5px 0' }}
             value={moment(value)}
-            onChange={e => onChange(e.toDate())}
+            onChange={e => onChange(e ? e.toDate() : value)}
           />
           : moment(value).format('DD-MM-YYYY (HH:mm:ss)'))
         :
         (editable
           ? typeof value === 'number' ?
-            <InputNumber value={value} onChange={onChange} /> :
+            <InputNumber value={value} style={{ width: '100%' }} onChange={onChange} /> :
             <Input style={{ margin: '-5px 0' }} value={value} onChange={e => onChange(e.target.value)} />
           : value)
     }

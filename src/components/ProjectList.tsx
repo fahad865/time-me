@@ -127,16 +127,17 @@ class ProjectList extends React.Component<Props, { showCreateDialog: boolean }> 
   render() {
     return (
       <div>
+        <div className="App-component" style={{ textAlign: 'right' }}>
+          <Button type="primary" icon="plus-circle" onClick={this.showModal}>New project</Button>
+        </div>
         <Table
           className="App-component"
           rowKey={'id'}
           bordered={true}
           dataSource={this.props.projects}
           columns={this.columns}
-        />
-        <div className="App-component" style={{ textAlign: 'left', marginTop: '-57px' }}>
-          <Button type="primary" icon="plus-circle" onClick={this.showModal}>New project</Button>
-        </div>
+          pagination={{position: 'bottom', defaultPageSize: 5}}
+        />        
         <CreateProject
           ref={this.saveFormRef}
           show={this.state.showCreateDialog}

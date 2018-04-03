@@ -18,8 +18,8 @@ function CreateTimeLog({ show, timeLog, projects, onCreate, onCancel, form }: Pr
   return (
     <Modal
       visible={show}
-      title="Log time"
-      okText="Log"
+      title="Create a manual log entry"
+      okText="Create"
       onCancel={onCancel}
       onOk={onCreate}
     >
