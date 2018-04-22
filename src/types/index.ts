@@ -2,6 +2,7 @@ export interface StoreState {
   projects: Project[];
   timeLogs: TimeLog[];
   timer: RunningTimer;
+  error: AppError;
 }
 
 export interface Project {
@@ -30,4 +31,8 @@ export interface RunningTimer {
   timeLog: TimeLog;
   isRunning: boolean;
   timerHandle?: any;
+}
+
+export interface AppError {
+  errorMessage: string;
 }

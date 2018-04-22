@@ -2,6 +2,7 @@ import types from './actionTypes';
 import { Project } from '../types';
 import projectApi from '../api/projectApi';
 import { Dispatch } from 'react-redux';
+import { actionFailure } from './errorActions';
 
 export interface EditProject {
   type: types.EDIT_PROJECT;
@@ -98,6 +99,9 @@ export function loadProjects() {
       })));
     })
       .catch(error => {
+        dispatch(actionFailure({
+          errorMessage: 'Failed to load projects'
+        }));
         throw (error);
       });
   };
@@ -112,6 +116,9 @@ export function getProject(id: string) {
       }));
     })
       .catch(error => {
+        dispatch(actionFailure({
+          errorMessage: 'Failed to get project'
+        }));
         throw (error);
       });
   };
@@ -134,6 +141,9 @@ export function saveProject(project: Project) {
       dispatch(projectUpdated(response._id));
     })
       .catch(error => {
+        dispatch(actionFailure({
+          errorMessage: 'Failed to save project'
+        }));
         throw (error);
       });
   };
@@ -146,6 +156,9 @@ export function deleteProject(project: Project) {
       dispatch(projectUpdated(project.id));
     })
       .catch(error => {
+        dispatch(actionFailure({
+          errorMessage: 'Failed to delete project'
+        }));
         throw (error);
       });
   };

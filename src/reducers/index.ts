@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import projects from './projectReducer';
 import timer from './timerReducer';
 import timeLogs from './timeLogReducer';
+import error from './errorReducer';
 import { StoreState } from '../types';
 import { rootAction } from '../actions';
 
@@ -17,13 +18,17 @@ export const initialState: StoreState = {
       timeElapsed: 0
     },
     isRunning: false
+  },
+  error: {
+    errorMessage: ''
   }
 };
 
 const appReducer = combineReducers<StoreState>({
   projects,
   timeLogs,
-  timer
+  timer,
+  error
 });
 
 const rootReducer = (state: StoreState, action: rootAction) => {

@@ -2,6 +2,7 @@ import { Menu, Icon, Row, Col } from 'antd';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import Timer from '../../containers/common/Timer';
+import ErrorAlert from '../../containers/common/ErrorAlert';
 
 const Header: React.SFC<{}> = () => (
   <div>
@@ -38,6 +39,7 @@ const Header: React.SFC<{}> = () => (
       </Row>
       <br />
     </div>
+    <ErrorAlert />
     <br />
     <br />
   </div>

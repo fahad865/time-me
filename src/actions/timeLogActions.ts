@@ -2,6 +2,7 @@ import types from './actionTypes';
 import { TimeLog } from '../types';
 import timeLogApi from '../api/timeLogApi';
 import { Dispatch } from 'react-redux';
+import { actionFailure } from './errorActions';
 
 export interface EditTimeLog {
   type: types.EDIT_TIMELOG;
@@ -103,6 +104,9 @@ export function loadTimeLogs() {
       })));
     })
       .catch(error => {
+        dispatch(actionFailure({
+          errorMessage: 'Failed to load time logs'
+        }));
         throw (error);
       });
   };
@@ -119,6 +123,9 @@ export function getTimeLog(id: string) {
       }));
     })
       .catch(error => {
+        dispatch(actionFailure({
+          errorMessage: 'Failed to get time log'
+        }));
         throw (error);
       });
   };
@@ -145,6 +152,9 @@ export function saveTimeLog(timeLog: TimeLog) {
       dispatch(timeLogUpdated(response._id));
     })
       .catch(error => {
+        dispatch(actionFailure({
+          errorMessage: 'Failed to save time log'
+        }));
         throw (error);
       });
   };
@@ -157,6 +167,9 @@ export function deleteTimeLog(timeLog: TimeLog) {
       dispatch(timeLogUpdated(timeLog.id));
     })
       .catch(error => {
+        dispatch(actionFailure({
+          errorMessage: 'Failed to delete time log'
+        }));
         throw (error);
       });
   };

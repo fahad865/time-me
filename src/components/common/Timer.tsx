@@ -15,18 +15,12 @@ export interface Props {
   incrementTimer: () => void;
 }
 
-class Timer extends React.Component<Props, { timerHandle: any }> {
+class Timer extends React.Component<Props, {}> {
   constructor(props: Props) {
     super(props);
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    // tslint:disable-next-line:no-console
-    console.log('timer1', this.props.timer.timeLog.id);
-    // tslint:disable-next-line:no-console
-    console.log('timer2', nextProps.timer.timeLog.id);
-    // tslint:disable-next-line:no-console
-    console.log('timer3', this.props.timer.timerHandle);
     if (nextProps.timer.timeLog.id !== this.props.timer.timeLog.id && this.props.timer.timerHandle) {
       clearInterval(this.props.timer.timerHandle);
     }

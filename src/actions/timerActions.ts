@@ -3,6 +3,7 @@ import { RunningTimer } from '../types';
 import { Dispatch } from 'react-redux';
 import timeLogApi from '../api/timeLogApi';
 import { loadTimeLogs } from './timeLogActions';
+import { actionFailure } from './errorActions';
 
 export interface StartTimerSuccess {
   type: types.START_TIMER_SUCCESS;
@@ -92,6 +93,9 @@ export function startTimer(timer: RunningTimer) {
       }));
       dispatch(timerUpdated(response._id));
     }).catch(error => {
+      dispatch(actionFailure({
+        errorMessage: 'Failed to start logging time'
+      }));
       throw (error);
     });
   };
@@ -114,6 +118,9 @@ export function stopTimer(timer: RunningTimer) {
       dispatch(loadTimeLogs());
       dispatch(timerUpdated(timer.timeLog.id));
     }).catch(error => {
+      dispatch(actionFailure({
+        errorMessage: 'Failed to stop logging time'
+      }));
       throw (error);
     });
   };

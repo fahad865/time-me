@@ -26,7 +26,11 @@ enum actionKeys {
   // Event action keys
   PROJECT_UPDATED = 'event/projectUpdated',
   TIMELOG_UPDATED = 'event/timeLogUpdated',
-  TIMER_UPDATED = 'event/timerUpdated'
+  TIMER_UPDATED = 'event/timerUpdated',
+
+  // Error action keys
+  ACTION_FAILURE = 'ACTION_FAILURE',
+  ERROR_RESET = 'ERROR_RESET'
 }
 
 export default actionKeys;
