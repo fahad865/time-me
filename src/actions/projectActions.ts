@@ -42,21 +42,21 @@ interface ProjectUpdated {
 export type ProjectAction = CreateProjectSuccess | UpdateProjectSuccess | DeleteProjectSuccess | LoadProjectsSuccess
   | EditProject | GetProjectSuccess;
 
-function updateProjectSuccess(project: Project): UpdateProjectSuccess {
+export function updateProjectSuccess(project: Project): UpdateProjectSuccess {
   return {
     type: types.UPDATE_PROJECT_SUCCESS,
     project
   };
 }
 
-function createProjectSuccess(project: Project): CreateProjectSuccess {
+export function createProjectSuccess(project: Project): CreateProjectSuccess {
   return {
     type: types.CREATE_PROJECT_SUCCESS,
     project
   };
 }
 
-function deleteProjectSuccess(project: Project): DeleteProjectSuccess {
+export function deleteProjectSuccess(project: Project): DeleteProjectSuccess {
   return {
     type: types.DELETE_PROJECT_SUCCESS,
     project

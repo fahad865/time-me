@@ -24,8 +24,6 @@ store.dispatch(loadTimeLogs());
 store.dispatch(loadTimer());
 
 socket.on('refreshProjects', (res: any) => {
-  // tslint:disable-next-line:no-console
-  console.log('Refresh projects!');
   store.dispatch(loadProjects());
 });
 
@@ -36,8 +34,6 @@ socket.on('refreshTimeLogs', (res: any) => {
 socket.on('refreshTimer', (res: any) => {
   if (!store.getState().timer.timerHandle) {
     clearInterval(store.getState().timer.timerHandle);
-    // tslint:disable-next-line:no-console
-    console.log('handle', store.getState().timer.timerHandle);
   }
   store.dispatch(loadTimeLogs());
   store.dispatch(loadTimer());
