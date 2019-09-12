@@ -17,6 +17,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start --scripts-version react-scripts-ts",
+    "start-prod": "serve -s build -l 4000",
     "build": "react-app-rewired build --scripts-version react-scripts-ts",
     "test": "react-app-rewired test --env=jsdom --scripts-version react-scripts-ts",
     "eject": "react-scripts-ts eject"
