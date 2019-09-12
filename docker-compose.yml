@@ -1,0 +1,16 @@
+version: '2.1'
+
+services:
+  time-me:
+    image: time-me
+    build: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 4000:4000
+    networks: 
+      - time-me-network
+networks:
+  time-me-network:
+    name: time-me-network
+    driver: bridge
